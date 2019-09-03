@@ -118,8 +118,11 @@ var router = mux.NewRouter()
 func main() {
 	fmt.Println("Chatapp v:0.1")
 
-	fs := http.FileServer(http.Dir("../frontend/build/staic"))
-	http.Handle("/static/", http.StripPrefix("/static/", fs))
+	fs := http.FileServer(http.Dir("../frontend/build/staic/js"))
+	http.Handle("/static/js/", http.StripPrefix("/static/js/", fs))
+
+	fs2 := http.FileServer(http.Dir("../frontend/build/staic/css"))
+	http.Handle("/static/css/", http.StripPrefix("/static/css/", fs2))
 
 	pool := websocket.NewPool()
 	go pool.Start()
