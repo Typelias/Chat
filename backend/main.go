@@ -9,6 +9,12 @@ import (
 	"github.com/gorilla/securecookie"
 )
 
+//Message defines json message
+type Message struct {
+	Type int    `json:"type"`
+	Body string `json:"body"`
+}
+
 var cookieHandler = securecookie.New(
 	securecookie.GenerateRandomKey(64),
 	securecookie.GenerateRandomKey(32))
@@ -52,6 +58,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 	pass := r.FormValue("password")
 	redirectTarget := "/"
 	if name != "" && pass != "" {
+		//TODO: Actial login
 		setSession(name, w)
 		redirectTarget = "/internal"
 	}
@@ -75,6 +82,8 @@ func serveWs(pool *websocket.Pool, w http.ResponseWriter, r *http.Request) {
 		Conn: conn,
 		Pool: pool,
 	}
+
+	client.Conn.WriteJSON(Message{Type: 1, Body: getUserName(r)})
 
 	pool.Register <- client
 	client.Read()
@@ -118,11 +127,11 @@ var router = mux.NewRouter()
 func main() {
 	fmt.Println("Chatapp v:0.1")
 
-	fs := http.FileServer(http.Dir("../frontend/build/staic/js"))
-	http.Handle("/static/js/", http.StripPrefix("/static/js/", fs))
+	fs := http.FileServer(http.Dir("../frontend/build/static/css"))
+	http.Handle("/static/css/", http.StripPrefix("/static/css/", fs))
 
-	fs2 := http.FileServer(http.Dir("../frontend/build/staic/css"))
-	http.Handle("/static/css/", http.StripPrefix("/static/css/", fs2))
+	fs2 := http.FileServer(http.Dir("../frontend/build/static/js"))
+	http.Handle("/static/js/", http.StripPrefix("/static/js/", fs2))
 
 	pool := websocket.NewPool()
 	go pool.Start()
