@@ -1,5 +1,7 @@
 var socket = new WebSocket("ws://localhost:8080/ws");
 
+var username = "";
+
 let connect = cb => {
   console.log("connecting");
   socket.onopen = () => {
@@ -8,7 +10,13 @@ let connect = cb => {
 
   socket.onmessage = msg => {
     console.log(msg);
-    cb(msg);
+    let temp = JSON.parse(msg.data);
+    console.log(temp.type);
+    if (temp.type == 2) {
+      username = temp.body;
+    } else {
+      cb(msg);
+    }
   };
   socket.onclose = event => {
     console.log("Socket closed connection: ", event);
@@ -21,7 +29,7 @@ let connect = cb => {
 
 let sendMsg = msg => {
   console.log("sending msg ", msg);
-  socket.send(msg);
+  socket.send(username + ": " + msg);
 };
 
-export { connect, sendMsg };
+export { connect, sendMsg, username };

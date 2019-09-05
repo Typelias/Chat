@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { connect, sendMsg } from "./api";
+import { connect, sendMsg, username } from "./api";
 import Header from "./components/Header";
 import ChatHistory from "./components/ChatHistory";
 import ChatInput from "./components/ChatInput";

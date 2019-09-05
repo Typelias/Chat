@@ -83,7 +83,7 @@ func serveWs(pool *websocket.Pool, w http.ResponseWriter, r *http.Request) {
 		Pool: pool,
 	}
 
-	client.Conn.WriteJSON(Message{Type: 1, Body: getUserName(r)})
+	client.Conn.WriteJSON(Message{Type: 2, Body: getUserName(r)})
 
 	pool.Register <- client
 	client.Read()
