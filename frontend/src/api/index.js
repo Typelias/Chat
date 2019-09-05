@@ -1,6 +1,6 @@
 var socket = new WebSocket("ws://localhost:8080/ws");
 
-var username = "";
+var username = "UserError";
 
 let connect = cb => {
   console.log("connecting");
